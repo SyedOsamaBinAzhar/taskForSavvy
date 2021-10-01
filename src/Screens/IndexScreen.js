@@ -2,7 +2,7 @@ import React from 'react'
 import { useState,useEffect } from 'react'
 
 //importing React Native Components
-import { Text, View,StyleSheet,FlatList,ScrollView,Image } from 'react-native'
+import { Text, View,StyleSheet,FlatList,ScrollView,Image,SafeAreaView,Platform,StatusBar,TouchableOpacity} from 'react-native'
 
 //importing custom components
 import ItemList from "../Components/IndexScreenComponents/ItemList"
@@ -10,21 +10,12 @@ import ItemList from "../Components/IndexScreenComponents/ItemList"
 //importing icon
 import { Fontisto } from '@expo/vector-icons'; 
 
-//importing fetchUser function
-
-
 import axios from "axios";
 
+import Header from "../Components/IndexScreenComponents/Header"
 
-const IndexScreen = () => {
-    const [users,setUsers] = useState([
-        // {name : "John", email: "john@gmail.com"},
-        // {name : "Mike", email: "Mike@gmail.com"},
-        // {name : "micheal", email: "micheal@gmail.com"},
-        // {name : "CLark", email: "CLark@gmail.com"},
-    ])
-
-
+const IndexScreen = ({navigation}) => {
+    const [users,setUsers] = useState([])
 
     useEffect(async() => {
         var users = await getUser();
@@ -54,8 +45,9 @@ const IndexScreen = () => {
 
     return (
         <View style = {styles.root}>
-            <View style = {{height: "10%" , width: "100%",backgroundColor: "orange"}}></View>
-            
+            <View style = {{height: "10%" , width: "100%"}}><Header/></View>
+        
+          
             <View style = {styles.userStylingContainer}>
                 <FlatList
                     data = {users}
@@ -64,16 +56,16 @@ const IndexScreen = () => {
                     
         
                     return <ScrollView>
-                        {console.log("users" + users)}
+                        <TouchableOpacity onPress={() => navigation.navigate('Single',{ id : item.id,name : item.name,email:item.email})}>
                         <View style = {styles.userListStyling}>
-                            <View style={styles.userImageContainer}><Image style={styles.userImage} source={require("../../assets/osama.png")}/></View>
-                            <View>
+                            <View style={styles.userImageContainer}><Image style={styles.userImage} source={require("../../assets/picture.png")}/></View>
+                            <View style={{marginLeft: 20}}>
                             <Text style={{fontSize:15}}>{item.name}</Text>
                             <Text style={{fontSize:15}}>{item.email}</Text>
-
                             </View>
-                            <Fontisto name="more-v-a" size={28} color="black" style={{position:"absolute",right:20}} />
+                            <Fontisto name="more-v-a" size={28} color="black" style={{position:"absolute",right:20,color: "rgb(192,192,192)"}} />
                         </View>
+                        </TouchableOpacity>
                     </ScrollView>
                     }}
 
@@ -87,20 +79,18 @@ const styles = StyleSheet.create({
     root : {
         height: "100%",
         width : "100%",
-        backgroundColor: "red",
-        padding: 10
+        backgroundColor: "#E0B0FF",
+        padding: 20
     },
     userStylingContainer : {
-        marginTop: 10,
-        backgroundColor: "brown",
+        backgroundColor: "white",
         borderRadius: 30,
         padding:10
     },
     userListStyling : {
         width : "100%",
         height: 100,
-        backgroundColor: "pink",
-        borderWidth: 2,
+        backgroundColor: "white",
         display:"flex",
         justifyContent:"center",
         alignItems:"center",
@@ -111,7 +101,7 @@ const styles = StyleSheet.create({
         height:60,width:60,backgroundColor:"purple",borderRadius:50,display:"flex",justifyContent:"center",alignItems:"center",position:"absolute",left:20
     },
     userImage : {
-        height:"80%",width:"80%"
+        height:"100%",width:"100%",borderRadius : 50
     }
 })
 
